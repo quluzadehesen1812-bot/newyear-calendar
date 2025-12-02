@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Year Advent Calendar</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+  <!-- Framer Motion UMD (v5) -->
+  <script src="https://unpkg.com/framer-motion@5.5.5/dist/framer-motion.umd.js"></script>
+
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-slate-900 via-indigo-900 to-slate-800"> 
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+    const { motion } = window["framer-motion"];
+
+    const compliments = [
+      "Your smile could warm even the coldest winter night.",
+      "Your voice feels like the sweetest holiday melody.",
+      "Time runs faster around you — in the best way.",
+      "Your eyes shine brighter than any New Year decoration.",
+      "Your jokes melt my mood like hot chocolate.",
+      "A warm drink and you — perfect winter combo.",
+      "Talking to you feels like escaping the chaos of the world.",
+      "You glow brighter than December stars.",
+      "One look from you could melt all the snow.",
+      "Being near you feels like a holiday on its own.",
+      "Seeing you makes my New Year wish sparkle.",
+      "Your smile warms my heart even in freezing weather.",
+      "Your energy could light up the whole city.",
+      "If love were a gift, you'd be the prettiest package.",
+      "I'm grateful for every moment with you — I want more.",
+      "Talking to you is so easy — it feels like you already get me.",
+      "Your vibe is pure holiday magic.",
+      "Whisper a little winter secret with your eyes — I'll listen.",
+      "Your presence makes my day brighter than any lights.",
+      "This year is better simply because you're in it.",
+      "A walk with you is my favorite New Year tradition.",
+      "Your thoughts always impress me.",
+      "One glance from you fixes everything — like magic.",
+      "Looking at you feels like the first surprise of the New Year — always lovely.",
+      "You make ordinary moments feel like festivities.",
+      "Your laugh is the bell that starts the celebration.",
+      "I like the way you notice little details — it's charming.",
+      "Your presence is the coziest part of winter.",
+      "With you, every midnight sparkles more.",
+      "You turn small moments into memorable ones.",
+      "Every day with you feels like a gift waiting to be opened."
+    ];
+
+    const boxEmojis = [
+      "🎁","⭐","❄️","❤️","🌙","☀️","🔔","🎄","✨","🍫",
+      "☕","🎶","🎉","🎈","🎀","🕯️","🌟","🍪","🍷","🧣",
+      "🧤","🧦","🛷","⛄","🎵","📸","🔑","💫","🛍️","🍦","🔮"
+    ];
+
+    const boxColors = Array.from({ length: 31 }, (_, i) =>
+      [
+        "bg-red-600 text-white border-red-300",
+        "bg-amber-400 text-black border-amber-300",
+        "bg-white text-slate-800 border-slate-300"
+      ][i % 3]
+    );
+
+    function AdventCalendar() {
+      const [opened, setOpened] = useState(Array(31).fill(false));
+
+      const toggle = (i) => {
+        setOpened(prev => {
+          const copy = prev.map(() => false);
+          copy[i] = !prev[i];
+          return copy;
+        });
+      };
+
+      return (
+        <div className="min-h-screen p-6 flex items-center justify-center">
+          <div className="max-w-5xl w-full">
+            <header className="mb-6 text-center text-white">
+              <h1 className="text-4xl font-extrabold">New Year Advent Calendar</h1>
+            </header>
+
+            <div className="grid grid-cols-4 gap-0">
+              {Array.from({ length: 31 }).map((_, i) => {
+                const colorClass = boxColors[i];
+                const isOpen = opened[i];
+
+                return (
+                  <motion.button
+                    key={i}
+                    onClick={() => toggle(i)}
+                    whileTap={{ scale: 0.96 }}
+                    className={`relative group rounded-2xl shadow-2xl p-3 ${"aspect-square"} flex items-center justify-center border ${colorClass} transition-transform hover:scale-105`}
+                  >
+                    {!isOpen && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <div className="text-2xl font-bold drop-shadow">{i + 1}</div>
+                      </div>
+                    )}
+
+                    {isOpen && (
+                      <div className="text-center px-3">
+                        <div className="text-3xl mb-2">{boxEmojis[i]}</div>
+                        <p className="text-sm text-slate-800 font-medium">{compliments[i]}</p>
+                      </div>
+                    )}
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<AdventCalendar />);
+  </script>
+</body>
+</html>
